@@ -23,12 +23,15 @@ jobs:
         sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libssl-dev
         pip install buildozer cython==0.29.33
 
-    - name: Accept All Android SDK Licenses
+    - name: Pre-accept Android SDK Licenses
       run: |
         mkdir -p ~/.android
         touch ~/.android/repositories.cfg
-        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --sdk_root=$ANDROID_HOME --licenses || true
-        yes | $ANDROID_HOME/tools/bin/sdkmanager --licenses || true
+        # Buildozer SDK Location
+        SDK_DIR="$HOME/.buildozer/android/platform/android-sdk"
+        mkdir -p "$SDK_DIR/licenses"
+        echo -e "\n893704243698f79fb11123b65d08c2fb1659283a\nd56f5187479451eabf01fb78af6dfcb131a6481e\n24333702171478b7ff09453ffd1b6fd6b0102235" > "$SDK_DIR/licenses/android-sdk-license"
+        echo -e "\n84831b9409646dc6ff8f2fe14d799d6f4696d69a" > "$SDK_DIR/licenses/android-sdk-preview-license"
 
     - name: Build APK with Buildozer
       run: |
@@ -40,4 +43,3 @@ jobs:
       with:
         name: Jarvis-APK
         path: bin/*.apk
-
