@@ -26,6 +26,12 @@ jobs:
     - name: Initialize Buildozer
       run: buildozer init
 
+    - name: Accept Android SDK Licenses
+      run: |
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
+        yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses || true
+
     - name: Build APK with Buildozer
       run: buildozer -v android debug
 
